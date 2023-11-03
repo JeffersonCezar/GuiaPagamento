@@ -37,7 +37,7 @@ app.get("/pay", async (req, res) => {
     
     await paymentService.createPaymentMercadoPago(dados.items[0].id, dados.items[0].description, dados.items[0].unit_price, dados.items[0].quantity, null)
     .then((response) => {
-      console.log('Resposta da criação do pagamento:', response);
+      //console.log('Resposta da criação do pagamento:', response);
       return res.redirect(response.init_point);
     })
     .catch((error) => {
@@ -48,7 +48,36 @@ app.get("/pay", async (req, res) => {
 
 });
 
+app.post("/not", (req, res) => {
+    var id = req.query;
 
+    setTimeout(() => {
+        var filtro = {
+            "order.id": id
+        }
+
+        MercadoPago.payment.search({
+            qs: filtro
+        }).then(data => {
+            var pagamento = data.body.results[0];
+
+            if(pagamento != undefined){
+                //console.log(pagamento);
+                //console.log(pagamento.external_refence);
+                //console.log(pagamento.status); // approved
+
+            }else{
+                console.log("Pagamento não existe!");
+            }
+
+        }).catch(err => {
+            console.log(err);
+        });
+
+    }, 20000);
+
+    res.send("OK");
+})
 
 app.listen(3000, (req, res) => {
     console.log("Servidor rodando!")
