@@ -29,7 +29,7 @@ app.get("/pay", async (req, res) => {
             }
         ],
         payer: {
-            email: emailPay
+            email: emailPay 
         },
         external_reference: _id,
     } 
